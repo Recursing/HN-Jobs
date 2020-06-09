@@ -48,7 +48,6 @@
           )
         )
       );
-    window.fl = filteredListings;
   });
 
   $: lowerSearchText = searchText.toLowerCase();
