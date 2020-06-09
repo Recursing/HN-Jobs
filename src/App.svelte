@@ -33,11 +33,14 @@
     if (window.localStorage.saved)
       saved = new Set(JSON.parse(window.localStorage.saved));
     if (window.localStorage.deleted)
-      deleted = new Set(JSON.parse(window.localStorage.deleted));
+      deleted = new Set(
+        JSON.parse(window.localStorage.deleted).filter(id => !saved.has(id))
+      );
     fetch("https://hacker-news.firebaseio.com/v0/item/23379196.json")
       .then(r => r.json())
       .then(item => item.kids)
-      .then(kids =>
+      .then(kids => {
+        kids.sort((a, b) => b - a);
         Promise.all(
           kids.map(kid =>
             fetch(`https://hacker-news.firebaseio.com/v0/item/${kid}.json`)
@@ -46,8 +49,8 @@
                 addListing(json);
               })
           )
-        )
-      );
+        );
+      });
   });
 
   $: lowerSearchText = searchText.toLowerCase();
@@ -99,12 +102,16 @@
       content={listing.text}
       on:delete={() => {
         deleted.add(listing.id);
+        saved.delete(listing.id);
+        saved = saved;
         deleted = deleted;
         window.localStorage.deleted = JSON.stringify(Array.from(deleted));
       }}
       on:save={() => {
         saved.add(listing.id);
+        deleted.delete(listing.id);
         saved = saved;
+        deleted = deleted;
         window.localStorage.saved = JSON.stringify(Array.from(saved));
       }} />
   {/each}
