@@ -36,7 +36,7 @@
       deleted = new Set(
         JSON.parse(window.localStorage.deleted).filter(id => !saved.has(id))
       );
-    fetch("https://hacker-news.firebaseio.com/v0/item/23379196.json")
+    fetch("https://hacker-news.firebaseio.com/v0/item/23702122.json")
       .then(r => r.json())
       .then(item => item.kids)
       .then(kids => {
