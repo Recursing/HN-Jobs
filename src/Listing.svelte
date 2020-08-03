@@ -3,6 +3,7 @@
 
   export let title = "title";
   export let content = "content";
+  export let url;
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   let expanded = false;
@@ -50,5 +51,6 @@
     <p class="description" transition:slide|local>
       {@html content}
     </p>
+    <a href={url}>{url}</a>
   {/if}
 </div>
